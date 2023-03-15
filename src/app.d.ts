@@ -9,4 +9,6 @@ declare global {
 	}
 }
 
+import "./scss/styles.scss"
+
 export {};
