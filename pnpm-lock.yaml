@@ -28,6 +28,7 @@ specifiers:
   storybook: ^7.0.2
   svelte: ^3.54.0
   svelte-check: ^3.0.1
+  sveltestrap: ^5.10.0
   tslib: ^2.4.1
   typescript: ^4.9.3
   vite: ^4.0.0
@@ -63,6 +64,7 @@ devDependencies:
   storybook: 7.0.2
   svelte: 3.56.0
   svelte-check: 3.1.4_sass@1.59.3+svelte@3.56.0
+  sveltestrap: 5.10.0_svelte@3.56.0
   tslib: 2.5.0
   typescript: 4.9.5
   vite: 4.1.4_sass@1.59.3
@@ -2007,7 +2009,6 @@ packages:
 
   /@popperjs/core/2.11.6:
     resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
-    dev: false
 
   /@sinclair/typebox/0.25.24:
     resolution: {integrity: sha512-XJfwUVUKDHF5ugKwIcxEgc9k8b7HbznCp6eUfWgu710hMPNIO4aw4/zB5RogDQz8nd6gyCDpU9O/m6qYEWY6yQ==}
@@ -7273,6 +7274,15 @@ packages:
       htmlparser2-svelte: 4.1.0
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /sveltestrap/5.10.0_svelte@3.56.0:
+    resolution: {integrity: sha512-k6Ob+6G2AMYvBidXHBKM9W28fJqFHbmosqCe/NC8pv6TV7K+v47Yw+zmnLWkjqCzzmjkSLkL48SrHZrlWc9mYQ==}
+    peerDependencies:
+      svelte: ^3.29.0
+    dependencies:
+      '@popperjs/core': 2.11.6
+      svelte: 3.56.0
     dev: true
 
   /synchronous-promise/2.0.17:
