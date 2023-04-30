@@ -1,41 +1,41 @@
-
-<script lang="ts">
-	import Input from "./table/Input.svelte";
-	import Text from "./table/Text.svelte";
-	import type {PropertyComponent} from "./table/table"
-	import {EditMethod, EditTarget} from "./table/table"
-
-	const textProperty: PropertyComponent = {
-    viewComponent: {
-        component: Text,
-        props: {}
-    },
-    editComponent: {
-        component: Input,
-        props: {}
-    }
-}
-
+<script>
+	import { isPropertyComponent } from "./table/table";
 	// html & css
-	export let classNameOfTable: string[] = []
-	export let classNameOfTableBody: string[] = ["table-group-divider"]
+	/**
+	 * @type {string[]}
+	 */
+	export let classNameOfTable = []
+	export let classNameOfTableBody = ["table-group-divider"]
 
 	// data
-	export let header: string[]
-	export let data: Promise<any[]> = (async () => [])()
-	export let itemIdentifier: string = "_id"
+	/**
+	 * @type {string[]}
+	 */
+	export let header
+	/**
+	 * @type {any}
+	 */
+	export let data
+	export let itemIdentifier = "_id"
+
+	// data presentation
+	/**
+	 * @type {import("./table/table").Presentation|undefined}
+	 */
+	export let presentation = undefined
 
 	// meta data
-	export let numbering: boolean = true
-	export let caption: string|undefined = undefined
+	export let numbering = true
+	/**
+	 * @type {string|undefined}
+	 */
+	export let caption = undefined
 
 	// interaction
-	export let editable: boolean = true
-	export let editMethods: EditMethod[] = [EditMethod.ByTarget]
-	export let editTarget: EditTarget = EditTarget.Property
-
-	$: isItemEditable = editable && editMethods.includes(EditMethod.ByTarget) && editTarget === EditTarget.Item
-	$: isPropertyEditable = editable && editMethods.includes(EditMethod.ByTarget) && editTarget === EditTarget.Property
+	/**
+	 * @type {((event: any, itemId: any) => void)|undefined}
+	 */
+	export let callbackRowClicked = undefined
 
 	function getColumnsCount() {
 		let count = header.length
@@ -43,12 +43,23 @@
 		return count
 	}
 
-	function prepareEditingItem() {
-		console.log('test')
-	}
-
-	function prepareEditingProperty(itemId: any, propertyName: string, property: any) {
-		console.log('test')
+	/**
+	 * @param {import("./table/table").Presentation|undefined} presentation
+	 * @param {number} colIndex
+	 * @param {number} rowIndex
+	 */
+	function getPresentation(presentation, colIndex, rowIndex) {
+		if (!presentation) {
+			return
+		}
+		if (!presentation.has(colIndex)) {
+			return
+		}
+		const columnPropropertyComponent = presentation.get(colIndex)
+		if (isPropertyComponent(columnPropropertyComponent)) {
+			return columnPropropertyComponent
+		}
+		return columnPropropertyComponent?.get(rowIndex)
 	}
 </script>
 
@@ -77,19 +88,18 @@
 		{:then resolvedData}
 		{#each resolvedData as item, itemIndex (item[itemIdentifier] ? item[itemIdentifier] : item)}
 		{@const itemId = item[itemIdentifier] ? item[itemIdentifier] : item}
-		<tr
-			on:click={isItemEditable? prepareEditingItem : undefined}
-		>
+		<tr on:click={callbackRowClicked? (e)=>callbackRowClicked?.(e, itemId) : undefined}>
 			{#if numbering}
 			<th scope="row">{itemIndex + 1}</th>
 			{/if}
-			{#each header as columnName}
-			{@const property = item[columnName]}
-			<td
-				on:click={isPropertyEditable? (event) => prepareEditingProperty(itemId, columnName, property): undefined}
-				on:keyup
-			>
-				<svelte:component this={textProperty.viewComponent.component} property={property} {...textProperty.viewComponent.props}/>
+			{#each header as propName, propIndex}
+			{@const propertyComponent = getPresentation(presentation, propIndex, itemIndex)}
+			<td>
+				{#if propertyComponent}
+					<svelte:component this={propertyComponent.component} property={item[propName]} {...propertyComponent.props}/>
+				{:else}
+					{item[propName]}
+				{/if}
 			</td> 
 			{/each}
 		</tr>
