@@ -1,24 +1,6 @@
 export interface PropertyComponent {
-    viewComponent: PropertyViewComponent
-    editComponent: PropertyEditComponent
-}
-
-export interface CustomPropertyComponent extends PropertyComponent {
-    updateCallback: (property: any) => null|undefined
-}
-
-export interface Validation {
-    isValid: boolean
-    messages?: string[]
-}
-
-export interface PropertyViewComponent {
     component: any
     props: any
-}
-
-export interface PropertyEditComponent extends PropertyViewComponent {
-    validate?: (property: any) => Validation
 }
 
 export enum EditMethod {
@@ -30,3 +12,9 @@ export enum EditTarget {
     Property,
     Item
 }
+
+type ItemIndex = number
+type PropIndex = number
+export type Presentation = Map<PropIndex, PropertyComponent|Map<ItemIndex, PropertyComponent>>
+
+export const isPropertyComponent = (target: any): target is PropertyComponent => {return true}

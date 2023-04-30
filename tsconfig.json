@@ -3,6 +3,8 @@
 	"compilerOptions": {
 		"allowJs": true,
 		"checkJs": true,
+		"declaration": true,
+		"outDir": "./dist",
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"resolveJsonModule": true,
