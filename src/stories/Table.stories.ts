@@ -3,6 +3,7 @@ import Table from '../components/Table.svelte';
 import type { PropertyComponent } from '../components/table/table'
 import Text from '../components/table/Text.svelte';
 import Input from '../components/table/Input.svelte';
+import { generatePromiseData } from './Table';
 
 const meta = {
     title: 'Example/Table',
@@ -17,24 +18,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const header = ["col-1", "col-2", "col-3"]
-const promiseData = generatePromiseData(20)
-async function generatePromiseData(size: number): Promise<any[]> {
-    const data = generateData(size)
-    return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(data), 3000)
-    })
-}
-function generateData(size: number) : any[] {
-    const data = []
-    for(let i = 0; i < size; i++) {
-        const item: any = {}
-        for(const [j, col] of header.entries()) {
-            item[col] = `prop-${j}`
-        }
-        data.push(item)
-    }
-    return data
-}
+const promiseData = generatePromiseData(20, header)
 
 export const Default: Story = {
     args: {

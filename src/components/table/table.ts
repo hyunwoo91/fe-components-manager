@@ -1,5 +1,13 @@
+import type { ComponentType, SvelteComponentTyped } from 'svelte';
+
+export interface PropConstraint {
+    property: any
+}
+
+type Constraint = SvelteComponentTyped<PropConstraint>;
+
 export interface PropertyComponent {
-    component: any
+    component: ComponentType<Constraint>
     props: any
 }
 

@@ -1,10 +1,16 @@
-<script lang="ts">
-export function get() {
-    return innerEl.value
-}
-export let property: any
+<script>
+    export function getValue() {
+        return innerEl.value
+    }
+    /**
+     * @type {any}
+     */
+    export let property
 
-let innerEl: any;
+    /**
+     * @type {HTMLInputElement}
+     */
+    let innerEl;
 </script>
 
 <input bind:this={innerEl} value={property}/>
