@@ -4,7 +4,7 @@ export async function generatePromiseData(size: number, header: string[]): Promi
         setTimeout(() => resolve(data), 3000)
     })
 }
-function generateData(size: number, header: string[]) : any[] {
+export function generateData(size: number, header: string[]) : any[] {
     const data = []
     for(let i = 0; i < size; i++) {
         const item: any = {}

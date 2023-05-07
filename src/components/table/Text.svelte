@@ -1,5 +1,8 @@
-<script lang="ts">
-    export let property: any
+<script>
+    /**
+	 * @type {any}
+	 */
+    export let property
 </script>
 
-<p>{property}</p>
+<div class="text-container">{property}</div>
