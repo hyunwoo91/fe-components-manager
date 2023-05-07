@@ -22,6 +22,7 @@
     "@storybook/addon-interactions": "^7.0.2",
     "@storybook/addon-links": "^7.0.2",
     "@storybook/addon-styling": "^0.3.2",
+    "@storybook/addon-svelte-csf": "^3.0.2",
     "@storybook/blocks": "^7.0.2",
     "@storybook/builder-vite": "^7.0.2",
     "@storybook/svelte": "^7.0.2",

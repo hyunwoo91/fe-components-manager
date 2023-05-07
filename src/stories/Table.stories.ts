@@ -1,18 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/svelte';
-import Table from '../components/Table.svelte';
 import type { PropertyComponent } from '../components/table/table'
 import Text from '../components/table/Text.svelte';
 import Input from '../components/table/Input.svelte';
 import { generatePromiseData } from './Table';
+import LoadingTable from '../components/LoadingTable.svelte';
 
 const meta = {
     title: 'Example/Table',
-    component: Table,
+    component: LoadingTable,
     tags: ['autodocs'],
     argTypes: {
 
     },
-} satisfies Meta<Table>;
+} satisfies Meta<LoadingTable>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

@@ -1,5 +1,6 @@
 <script>
-	import { isPropertyComponent } from "./table/table";
+	import { getPresentation } from "./table/table";
+
 	// html & css
 	/**
 	 * @type {string[]}
@@ -43,27 +44,15 @@
 		return count
 	}
 
-	/**
-	 * @param {import("./table/table").Presentation|undefined} presentation
-	 * @param {number} colIndex
-	 * @param {number} rowIndex
-	 */
-	function getPresentation(presentation, colIndex, rowIndex) {
-		if (!presentation) {
-			return
-		}
-		if (!presentation.has(colIndex)) {
-			return
-		}
-		const columnPropropertyComponent = presentation.get(colIndex)
-		if (isPropertyComponent(columnPropropertyComponent)) {
-			return columnPropropertyComponent
-		}
-		return columnPropropertyComponent?.get(rowIndex)
-	}
+	export let offsetWidth = undefined;
+	export let offsetHeght = undefined;
 </script>
 
-<table class={["table", ...classNameOfTable].join(" ")}>
+<table
+	bind:offsetWidth={offsetWidth}
+	bind:offsetHeight={offsetHeght}
+	class={["table", ...classNameOfTable].join(" ")}
+>
 	{#if caption}
 	<caption>{caption}</caption>
 	{/if}
@@ -78,16 +67,13 @@
 		</tr>
 	</thead>
 	<tbody class={classNameOfTableBody.join(" ")}>
-	{#if !data}
-		<p>no data</p>
+	{#if !data || data.length == 0}	
+	<tr>
+		<th scope="row" colspan={getColumnsCount()}>no data</th>
+	</tr>
 	{:else}
-		{#await data}
-		<tr>
-			<th scope="row" colspan={getColumnsCount()}>loading...</th>
-		</tr>
-		{:then resolvedData}
-		{#each resolvedData as item, itemIndex (item[itemIdentifier] ? item[itemIdentifier] : item)}
-		{@const itemId = item[itemIdentifier] ? item[itemIdentifier] : item}
+		{#each data as item, itemIndex (item[itemIdentifier] ? item[itemIdentifier] : item)}
+		{@const itemId = itemIdentifier && item[itemIdentifier] !== undefined ? item[itemIdentifier] : item}
 		<tr on:click={callbackRowClicked? (e)=>callbackRowClicked?.(e, itemId) : undefined}>
 			{#if numbering}
 			<th scope="row">{itemIndex + 1}</th>
@@ -96,7 +82,25 @@
 			{@const propertyComponent = getPresentation(presentation, propIndex, itemIndex)}
 			<td>
 				{#if propertyComponent}
-					<svelte:component this={propertyComponent.component} property={item[propName]} {...propertyComponent.props}/>
+					{#if propertyComponent.props.hasOwnProperty('propertyComponent')}
+					<svelte:component
+						this={propertyComponent.component}
+						property={item[propName]}
+						itemId = {itemId}
+						{itemIndex}
+						{propIndex}
+						dataSize={data.length}
+						{...propertyComponent.props}
+						on:clickProperty
+						on:updateProperty
+					/>
+					{:else}
+					<svelte:component
+						this={propertyComponent.component}
+						property={item[propName]}
+						{...propertyComponent.props}
+					/>
+					{/if}
 				{:else}
 					{item[propName]}
 				{/if}
@@ -104,7 +108,6 @@
 			{/each}
 		</tr>
 		{/each}
-		{/await}
 	{/if}
 	</tbody>
 	<tfoot>
