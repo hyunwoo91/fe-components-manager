@@ -1,9 +1,5 @@
-export async function generatePromiseData(size: number, header: string[]): Promise<any[]> {
-    const data = generateData(size, header)
-    return new Promise((resolve, reject) => {
-        setTimeout(() => resolve(data), 3000)
-    })
-}
+import type { HeadItem } from "../components/table/table"
+
 export function generateData(size: number, header: string[]) : any[] {
     const data = []
     for(let i = 0; i < size; i++) {
@@ -14,4 +10,15 @@ export function generateData(size: number, header: string[]) : any[] {
         data.push(item)
     }
     return data
+}
+
+export function generateHeader(columnCount: number) : HeadItem[] {
+    const header = []
+    for (let i = 0; i < columnCount; i++) {
+        header.push({
+            title: `col ${i}`,
+            dataAccessor: `col-${i}`
+        })
+    }
+    return header
 }

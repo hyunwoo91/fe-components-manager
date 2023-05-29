@@ -1,11 +1,22 @@
 import type { ComponentType, SvelteComponentTyped } from 'svelte';
 
+export interface HeadBase {
+    title: string
+    icon?: string
+    className?: string[]
+    iconDesc?: string
+}
+
+export interface HeadItem extends HeadBase {
+    dataAccessor: string
+}
+
 export interface PropConstraint {
-    property: any
+    property: any // Declaration required; automatic injection
 }
 
 export interface PropContainerConstraint extends PropConstraint {
-    propertyComponent: PropertyComponent
+    propertyComponent: PropertyComponent // Declaration required; automatic injection
 }
 
 type Constraint = SvelteComponentTyped<PropConstraint>;
@@ -15,6 +26,23 @@ type ContainerConstraint = SvelteComponentTyped<PropContainerConstraint>;
 export interface PropertyComponent {
     component: ComponentType<Constraint>|ComponentType<ContainerConstraint>
     props: any
+}
+
+interface ActionConstraint {
+    item: any
+}
+export type ActionComponent = ComponentType<SvelteComponentTyped<ActionConstraint>>
+export interface Action {
+    component: ActionComponent
+    props?: object
+}
+
+export interface ActionsOption {
+    title?: string
+    showEvents?: Set<string>
+    hideEvents?: Set<string>
+    actions: Action[]
+    at: "popover"|"first"|"last"
 }
 
 export enum EditMethod {
