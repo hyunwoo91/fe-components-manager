@@ -1,40 +1,39 @@
 import type { Meta, StoryObj } from '@storybook/svelte';
-import type { PropertyComponent } from '../components/table/table'
-import Text from '../components/table/Text.svelte';
-import Input from '../components/table/Input.svelte';
-import { generatePromiseData } from './Table';
-import LoadingTable from '../components/LoadingTable.svelte';
+import type { HeadItem, PropertyComponent } from '../components/table/table'
+import Text from '../components/editable-table/properties/Text.svelte';
+import { generateData, generateHeader } from './table';
+import Table from '../components/table/Table.svelte';
 
 const meta = {
-    title: 'Example/Table',
-    component: LoadingTable,
+    title: 'Table/Basic',
+    component: Table,
     tags: ['autodocs'],
     argTypes: {
 
     },
-} satisfies Meta<LoadingTable>;
+} satisfies Meta<Table>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const header = ["col-1", "col-2", "col-3"]
-const promiseData = generatePromiseData(20, header)
+const header: HeadItem[] = generateHeader(3)
+const data = generateData(20, header.map(h=>h.dataAccessor))
 
 export const Default: Story = {
     args: {
         header: header,
-        data: promiseData,
+        data: data,
     },
 };
 
 const samplePropComp1: PropertyComponent = {
     component : Text,
-    props : {}
+    props : {className:["text-primary"]}
 }
 
 const samplePropComp2: PropertyComponent = {
-    component : Input,
-    props : {}
+    component : Text,
+    props : {className:["text-danger"]}
 }
 
 const presentation = new Map(
@@ -47,7 +46,7 @@ const presentation = new Map(
 export const Presentation: Story = {
     args: {
         header: header,
-        data: promiseData,
+        data: data,
         presentation: presentation
     },
 };

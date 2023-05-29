@@ -1,7 +1,7 @@
 <script>
-    import { createEventDispatcher, onMount } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
     /**
-	 * @type {import("./table").PropertyComponent}
+	 * @type {import("../../../table/table").PropertyComponent}
 	 */
     export let propertyComponent
     /**
@@ -10,7 +10,7 @@
     export let property
     export let editable = false
     /**
-	 * @type {Set<import("./editableTable").EditMethod>|undefined}
+	 * @type {Set<import("../../editableTable").EditMethod>|undefined}
 	 */
     export let editMethod = undefined
 
@@ -36,7 +36,7 @@
 	 */
     function handlePropertyClicked(event) {
         /**
-         * @type {import("./table").ClickPropertyEventDetail}
+         * @type {import("../../../table/table").ClickPropertyEventDetail}
          */
         const detail = {
             itemId,
@@ -51,24 +51,6 @@
         dispatch("clickProperty", detail)
     }
 
-    /**
-	 * @param {any} event
-	 */
-    function handleUpdateProperty(event) {
-        console.log('update event')
-        const detail = {
-            itemId,
-            property: event.detail.property,
-            // @ts-ignore
-            itemIndex,
-            // @ts-ignore
-            propIndex,
-            // @ts-ignore
-            dataSize,
-        }
-        dispatch("updateProperty", detail)
-    }
-
 	const dispatch = createEventDispatcher();
 </script>
 
@@ -78,7 +60,12 @@
     class:clickable="{editable}"
     on:click={editable && editMethod && editMethod.has('click-property')? handlePropertyClicked : undefined}
 >
-    <svelte:component this={propertyComponent.component} {property} {...propertyComponent.props} on:updateProperty={handleUpdateProperty}/>
+    <svelte:component
+        this={propertyComponent.component}
+        {property}
+        {...propertyComponent.props}
+        {...$$restProps}
+    />
 </div>
 
 <style>
